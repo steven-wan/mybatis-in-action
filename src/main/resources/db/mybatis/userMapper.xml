@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="userMapper">
+    <select id="selectUser" parameterType="String" resultType="user">
+        SELECT * FROM USER
+        <where>
+            <if test="username != null and username !=''">
+                NAME =#{username}
+            </if>
+        </where>
+    </select>
+
+    <update id="updateUser" parameterType="user">
+        UPDATE USER
+        <set>
+            <if test="name != null">
+                NAME =#{name}
+            </if>
+            <if test="tel != null">
+                tel =#{tel}
+            </if>
+            <if test="address != null">
+                address =#{address}
+            </if>
+        </set>
+        WHERE id =#{id}
+    </update>
+
+    <insert id="batchInsertUsers" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into USER (NAME, TEL, ADDRESS) values
+        <foreach item="item" collection="list" separator=",">
+            (#{item.name}, #{item.tel}, #{item.address})
+        </foreach>
+    </insert>
+</mapper>
